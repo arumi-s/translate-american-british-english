@@ -7,6 +7,7 @@ describe('translate', () => {
 
 	it('should translate text spellings from American to British', () => {
 		expect(translate('my favorite color is gray')).toBe('my favourite colour is grey');
+		expect(translate('a skillful story')).toBe('a skilful story');
 		expect(translate('My favorite color is gray.')).toBe('My favourite colour is grey.');
 		expect(translate('My Favorite COLOR is Gray')).toBe('My Favourite COLOUR is Grey');
 		expect(translate('My Favourite COLOUR is Grey')).toBe('My Favourite COLOUR is Grey');
@@ -27,6 +28,7 @@ describe('translate', () => {
 
 	it('should translate text spellings from British to American', () => {
 		expect(translate('my favourite colour is grey', { american: true })).toBe('my favorite color is gray');
+		expect(translate('an unskilful building with three storeys', { american: true })).toBe('an unskillful building with three stories');
 		expect(translate('My favourite colour is grey.', { american: true })).toBe('My favorite color is gray.');
 		expect(translate('My Favourite COLOUR is Grey', { american: true })).toBe('My Favorite COLOR is Gray');
 		expect(translate('My Favorite COLOR is Gray', { american: true })).toBe('My Favorite COLOR is Gray');
