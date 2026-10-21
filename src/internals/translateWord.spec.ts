@@ -17,6 +17,15 @@ describe('translateWord', () => {
 		expect(translateWord('')).toBe('');
 	});
 
+	describe.each([false, true])('with american: %s', (american) => {
+		it.each(['constructor', 'Constructor', 'CONSTRUCTOR', 'conSTRUCTOR', 'constructor-', 'Constructor-', '__proto__'])(
+			'should preserve inherited property name %s',
+			(word) => {
+				expect(translateWord(word, { american })).toBe(word);
+			},
+		);
+	});
+
 	it('should keep the same word when no translate available', () => {
 		expect(translateWord('cat')).toBe('cat');
 		expect(translateWord('Internet')).toBe('Internet');

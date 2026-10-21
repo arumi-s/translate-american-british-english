@@ -4,9 +4,9 @@ import { translateCase } from './translateCase';
 
 function map(word: string, options?: Partial<Options>) {
 	if (options?.american) {
-		return BritishSpellings[word as BritishSpellingWord];
+		return Object.prototype.hasOwnProperty.call(BritishSpellings, word) ? BritishSpellings[word as BritishSpellingWord] : undefined;
 	} else {
-		return AmericanSpellings[word as AmericanSpellingWord];
+		return Object.prototype.hasOwnProperty.call(AmericanSpellings, word) ? AmericanSpellings[word as AmericanSpellingWord] : undefined;
 	}
 }
 

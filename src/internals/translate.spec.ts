@@ -5,6 +5,15 @@ describe('translate', () => {
 		expect(translate).toBeDefined();
 	});
 
+	it('should preserve constructor spellings while translating surrounding text', () => {
+		expect(translate('constructor Constructor CONSTRUCTOR conSTRUCTOR constructor-color Constructor-color')).toBe(
+			'constructor Constructor CONSTRUCTOR conSTRUCTOR constructor-colour Constructor-colour',
+		);
+		expect(translate('constructor Constructor CONSTRUCTOR conSTRUCTOR constructor-colour Constructor-colour', { american: true })).toBe(
+			'constructor Constructor CONSTRUCTOR conSTRUCTOR constructor-color Constructor-color',
+		);
+	});
+
 	it('should translate text spellings from American to British', () => {
 		expect(translate('my favorite color is gray')).toBe('my favourite colour is grey');
 		expect(translate('a skillful story')).toBe('a skilful story');
