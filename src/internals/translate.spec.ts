@@ -5,6 +5,23 @@ describe('translate', () => {
 		expect(translate).toBeDefined();
 	});
 
+	it('should preserve shared spellings while translating British spellings to American', () => {
+		expect(translate('Cancellation of the grey buses prompted dialogue about fuel gauges.', { american: true })).toBe(
+			'Cancellation of the gray buses prompted dialogue about fuel gauges.',
+		);
+		expect(translate('The aesthete favoured colourful aesthetics.', { american: true })).toBe('The aesthete favored colorful aesthetics.');
+	});
+
+	it.each([
+		['The color dialog is gray.', 'The colour dialog is grey.'],
+		['He left his armor as a gage.', 'He left his armour as a gage.'],
+		['The gages had a sweet flavor.', 'The gages had a sweet flavour.'],
+		['They favored busses on the cheek.', 'They favoured busses on the cheek.'],
+		['They were bussing at the theater.', 'They were bussing at the theatre.'],
+	])('should preserve context-dependent spellings in %s', (text, expected) => {
+		expect(translate(text)).toBe(expected);
+	});
+
 	it('should translate text spellings from American to British', () => {
 		expect(translate('my favorite color is gray')).toBe('my favourite colour is grey');
 		expect(translate('a skillful story')).toBe('a skilful story');
