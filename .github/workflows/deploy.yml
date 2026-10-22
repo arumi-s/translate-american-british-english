@@ -3,7 +3,6 @@ name: CD
 on:
   release:
     types: [created]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,19 +13,37 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  check-and-test:
+    name: Check & Test
+    permissions:
+      contents: read
+    uses: ./.github/workflows/test.yml
+
   publish:
     name: Publish to NPM
+    needs: [check-and-test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm install -g npm@latest
-      - run: npm ci --ignore-scripts
-      - run: npm run prettier:check
-      - run: npm run lint:check
-      - run: npm run test:ci
-      - run: npm run build
-      - run: npm publish --provenance --access public
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Check version matches tag
+        run: test "${{ github.event.release.tag_name }}" = "v$(node -p "require('./package.json').version")"
+
+      - name: Publish to npm
+        run: pnpm publish --no-git-checks --provenance --access public
